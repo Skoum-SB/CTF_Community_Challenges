@@ -1,0 +1,24 @@
+FROM itzg/minecraft-server:latest
+
+# Copie de la map existante
+COPY world /data/world
+
+# Définition des variables d'environnement
+ENV EULA=TRUE
+ENV VERSION=1.21.5
+ENV SERVER_IP=0.0.0.0
+ENV ENABLE_RCON=false
+ENV ONLINE_MODE=false
+ENV GAMEMODE=adventure
+ENV DIFFICULTY=peaceful
+
+# Fix des permissions
+USER root
+RUN chown -R 1000:1000 /data/world
+USER 1000
+
+# Exposition des ports
+EXPOSE 25565
+
+# Commande de démarrage
+CMD ["/start"]
