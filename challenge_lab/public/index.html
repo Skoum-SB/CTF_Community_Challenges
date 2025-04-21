@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="homepage.css">
+    <title>Home Page</title>
+  </head>
+  <body>
+    <div class="App">
+      <header class="App-header">
+        <div id="kc-header"></div>
+        <div id="kc-content">
+          <div id="kc-content-wrapper">
+            <div id="kc-form">
+              <img
+                id="logo"
+                src="Ressource/planet_rap.jpg"
+                alt="42 logo"
+                style="width: 300px; height: 300px; margin-bottom: 20px;"
+              />
+              <div id="kc-form-wrapper">
+                <div class="input-group">
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Login or email"
+                    autofocus
+                    autocomplete="off"
+                    class="input-field"
+                  />
+                </div>
+                <div class="input-group">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    autocomplete="off"
+                    class="input-field"
+                  />
+                </div>
+                <div id="kc-form-buttons">
+                  <input
+                    class="submit-button"
+                    name="login"
+                    id="kc-login"
+                    type="submit"
+                    value="Sign In"
+                    onclick="NewPage(document.getElementById('username').value, document.getElementById('password').value)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+    <script>
+      const createElement = (Element, attributes = {}, childrenArray = []) => {
+        const tempElement = document.createElement(Element);
+        Object.entries(attributes).forEach((item) => {
+          const [key, value] = item;
+          tempElement[key] = value;
+        });
+        childrenArray?.forEach((child) => {
+          tempElement.append(child);
+        });
+        return tempElement;
+      };
+
+      function NewPage(id, password) {
+        if (id === "admin52" && password === "Admin52!") {
+          AveCesar();
+        } else if (id === "shrek" && password === "shrek") {
+          window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley";
+        } else {
+          alert("Wrong password or login");
+        }
+      }
+
+      function AveCesar() {
+        const appDiv = document.querySelector("#kc-header");
+        appDiv.nextElementSibling.remove();
+        appDiv.style.textAlign = "center";
+        appDiv.style.padding = "20px";
+        appDiv.style.borderRadius = "10px";
+        const h1Cesar = createElement("h1", { innerHTML: "Ave Cesar" });
+        appDiv.append(h1Cesar);
+
+        const cesarImg = createElement("img", {
+          src: "https://e1.pxfuel.com/desktop-wallpaper/425/638/desktop-wallpaper-julius-caesar-png-transparent-julius-caesar-png-julius-caesar.jpg",
+          alt: "cesar",
+          style: "width: 150px; height: auto; border-radius: 8px; margin-bottom: 20px;"
+        });
+        appDiv.append(cesarImg);
+
+        // Fetch the text from email.json and display it
+        fetch('Ressource/email.json')
+          .then(response => response.json())
+          .then(data => {
+            const cesarmessage = createElement("p", { innerHTML: data.text });
+            appDiv.append(cesarmessage);
+          })
+          .catch(error => console.error('Error fetching the JSON:', error));
+      }
+    </script>
+  </body>
+</html>
