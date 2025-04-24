@@ -2,7 +2,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.web
+      dockerfile: web.Dockerfile
     container_name: ctf-lab-web
     ports:
       - "80:80"
@@ -11,45 +11,39 @@ services:
     restart: unless-stopped
     networks:
       ctf-network:
-        ipv4_address: 172.20.0.3
+        ipv4_address: 172.20.0.2
 
   ftp:
     build:
       context: .
-      dockerfile: Dockerfile.ftp
+      dockerfile: ftp.Dockerfile
     container_name: ctf-lab-ftp
-    ports:
-      - "21:21"
-      - "20:20"
-      - "21000-21010:21000-21010"
-    restart: unless-stopped
-    networks:
-      ctf-network:
-        ipv4_address: 172.20.0.4
-
-  ssh:
-    build:
-      context: .
-      dockerfile: Dockerfile.ssh
-    container_name: ctf-lab-ssh
-    ports:
-      - "48884:22"
     restart: unless-stopped
     networks:
       ctf-network:
         ipv4_address: 172.20.0.2
-        
-  kali:
+
+  ssh:
     build:
       context: .
-      dockerfile: Dockerfile.kali
-    container_name: ctf-lab-kali
-    ports:
-      - "22222:22"
+      dockerfile: ssh.Dockerfile
+    container_name: ctf-lab-ssh
     restart: unless-stopped
     networks:
       ctf-network:
-        ipv4_address: 172.20.0.1
+        ipv4_address: 172.20.0.2
+
+  kali:
+    build:
+      context: .
+      dockerfile: kali.Dockerfile
+    container_name: ctf-lab-kali
+    ports:
+      - "1337:22"
+    restart: unless-stopped
+    networks:
+      ctf-network:
+        ipv4_address: 172.20.0.3
     cap_add:
       - NET_ADMIN
       - SYS_ADMIN
@@ -61,4 +55,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/24 
+        - subnet: 172.20.0.0/24

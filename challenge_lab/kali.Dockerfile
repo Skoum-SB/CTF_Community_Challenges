@@ -18,11 +18,12 @@ RUN apt-get update && \
     hydra \
     john \
     unzip \
+    zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Configuration de SSH
-RUN mkdir /var/run/sshd && \
+RUN mkdir -p /var/run/sshd && \
     echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
     echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 
@@ -32,9 +33,14 @@ RUN useradd -m -s /bin/bash jason && \
     adduser jason sudo && \
     echo 'jason ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Configuration du répertoire personnel de Jason
+# Configuration du répertoire personnel de Jason et création du dossier protégé
 RUN mkdir -p /home/jason/tools && \
     mkdir -p /home/jason/data && \
+    mkdir -p /home/jason/secret_folder && \
+    echo "Bravo tu as réussi ce challenge !!! J'espère qu'il était au niveau de tes attentes ! L'équipe CTF Community" > /home/jason/secret_folder/document.txt && \
+    cd /home/jason && \
+    zip -e -P "7hidkqsh901jdYnovCTF" protected_folder.zip secret_folder/document.txt && \
+    rm -rf secret_folder && \
     chown -R jason:jason /home/jason
 
 # Installation des outils supplémentaires pour CTF

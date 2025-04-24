@@ -1,5 +1,4 @@
-# Utiliser Ubuntu 22.04 comme base
-FROM ubuntu:22.04
+FROM ubuntu:latest
 
 # Mettre à jour et installer Apache
 RUN apt-get update && \

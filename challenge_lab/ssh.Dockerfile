@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:latest
 
 # Installation des paquets nécessaires
 RUN apt-get update && \
