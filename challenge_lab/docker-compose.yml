@@ -38,6 +38,23 @@ services:
     networks:
       ctf-network:
         ipv4_address: 172.20.0.2
+        
+  kali:
+    build:
+      context: .
+      dockerfile: Dockerfile.kali
+    container_name: ctf-lab-kali
+    ports:
+      - "22222:22"
+    restart: unless-stopped
+    networks:
+      ctf-network:
+        ipv4_address: 172.20.0.1
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    volumes:
+      - ./kali_data:/home/jason/data
 
 networks:
   ctf-network:
