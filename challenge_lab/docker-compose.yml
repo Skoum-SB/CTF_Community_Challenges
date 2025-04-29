@@ -1,33 +1,18 @@
 services:
-  web:
+  ctf-services:
     build:
       context: .
-      dockerfile: web.Dockerfile
-    container_name: ctf-lab-web
+      dockerfile: Dockerfile
+    container_name: ctf-lab-services
     ports:
-      - "80:80"
+      - "80:80"     # Web
+      - "21:21"     # FTP command
+      - "20:20"     # FTP data
+      - "21000-21010:21000-21010" # FTP passive
+      - "22:22"     # SSH
     volumes:
       - ./public:/var/www/html
-    restart: unless-stopped
-    networks:
-      ctf-network:
-        ipv4_address: 172.20.0.2
-
-  ftp:
-    build:
-      context: .
-      dockerfile: ftp.Dockerfile
-    container_name: ctf-lab-ftp
-    restart: unless-stopped
-    networks:
-      ctf-network:
-        ipv4_address: 172.20.0.2
-
-  ssh:
-    build:
-      context: .
-      dockerfile: ssh.Dockerfile
-    container_name: ctf-lab-ssh
+      - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
     restart: unless-stopped
     networks:
       ctf-network:
