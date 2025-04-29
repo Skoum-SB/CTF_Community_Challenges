@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: ubuntu.Dockerfile
+    image: skoum/ctf-lab-services:latest
     container_name: ctf-lab-services
     ports:
       - "80:80"     # Web
@@ -22,6 +23,7 @@ services:
     build:
       context: .
       dockerfile: kali.Dockerfile
+    image: skoum/ctf-lab-kali:latest
     container_name: ctf-lab-kali
     ports:
       - "1337:22"
