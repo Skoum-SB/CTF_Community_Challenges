@@ -68,6 +68,8 @@ RUN echo "listen=YES" > /etc/vsftpd.conf && \
     echo "anon_root=/var/ftp" >> /etc/vsftpd.conf && \
     echo "no_anon_password=YES" >> /etc/vsftpd.conf
 
+COPY public/ /var/www/html/    
+
 # Configuration de supervisord pour lancer tous les services
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
