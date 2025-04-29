@@ -34,8 +34,6 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_ADMIN
-    volumes:
-      - ./kali_data:/home/jason/data
 
 networks:
   ctf-network:
