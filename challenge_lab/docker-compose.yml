@@ -2,7 +2,7 @@ services:
   ctf-services:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ubuntu.Dockerfile
     container_name: ctf-lab-services
     ports:
       - "80:80"     # Web

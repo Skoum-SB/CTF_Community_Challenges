@@ -2,12 +2,7 @@ FROM ubuntu:latest
 
 # Installation des paquets nécessaires
 RUN apt-get update && \
-    apt-get install -y \
-    apache2 \
-    vsftpd \
-    openssh-server \
-    zip \
-    supervisor && \
+    apt-get install -y openssh-server vsftpd apache2 zip supervisor && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -15,7 +10,7 @@ RUN apt-get update && \
 RUN rm -rf /var/www/html/*
 
 # Configuration SSH
-RUN mkdir -p /var/run/sshd && \
+RUN mkdir /var/run/sshd && \
     echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
     echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
@@ -31,16 +26,18 @@ RUN mkdir -p /home/adrien/.confidentiel && \
     chown -R adrien:adrien /home/adrien/.confidentiel
 
 # Configuration FTP
-# Création de l'arborescence FTP
+# Création de l'arborescence demandée
 RUN mkdir -p /var/ftp/home/administration/rh/personnel/directeur_adrien && \
     mkdir -p /var/ftp/home/communication && \
     mkdir -p /var/ftp/home/publics && \
     mkdir -p /var/ftp/home/étudiants && \
     mkdir -p /var/ftp/home/informatique
 
-# Création du fichier note.txt et du ZIP protégé
-RUN echo "Bonjour Adrien, voici ton mot de passe pour te connecter à la machine : t9UJyAX&" > /var/ftp/home/administration/rh/personnel/directeur_adrien/note.txt && \
-    cd /var/ftp/home/administration/rh/personnel/directeur_adrien && \
+# Création du fichier note.txt
+RUN echo "Bonjour Adrien, voici ton mot de passe pour te connecter à la machine : t9UJyAX&" > /var/ftp/home/administration/rh/personnel/directeur_adrien/note.txt
+
+# Création du fichier ZIP protégé par mot de passe (password123)
+RUN cd /var/ftp/home/administration/rh/personnel/directeur_adrien && \
     zip -P password123 compte_ssh.zip note.txt && \
     rm note.txt
 
@@ -50,7 +47,7 @@ RUN chmod -R 555 /var/ftp
 # Créer le répertoire chroot manquant
 RUN mkdir -p /var/run/vsftpd/empty
 
-# Configuration de vsftpd
+# Configuration de vsftpd pour permettre l'accès anonyme
 RUN echo "listen=YES" > /etc/vsftpd.conf && \
     echo "anonymous_enable=YES" >> /etc/vsftpd.conf && \
     echo "local_enable=YES" >> /etc/vsftpd.conf && \
@@ -71,12 +68,11 @@ RUN echo "listen=YES" > /etc/vsftpd.conf && \
     echo "anon_root=/var/ftp" >> /etc/vsftpd.conf && \
     echo "no_anon_password=YES" >> /etc/vsftpd.conf
 
-# Configuration de supervisor pour gérer les trois services
-RUN mkdir -p /var/log/supervisor
+# Configuration de supervisord pour lancer tous les services
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Exposer les ports nécessaires
-EXPOSE 80 20 21 21000-21010 22
+EXPOSE 80 21 20 21000-21010 22
 
-# Lancer supervisord
+# Démarrer tous les services via supervisord
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
